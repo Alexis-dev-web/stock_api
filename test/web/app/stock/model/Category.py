@@ -7,7 +7,7 @@ class Category(db.Model):
   __tablename__ = "Category"
 
   id = db.Column(db.String(255), primary_key=True)
-  name = db.Colum(db.String(255), unique=True, nullable=False)
+  name = db.Column(db.String(255), unique=True, nullable=False)
   description = db.Column(db.String(500), nullable=True)
   active = db.Column(db.Boolean(), default=True, nullable=True)
   created_at  = db.Column(db.TIMESTAMP, default=func.current_timestamp())

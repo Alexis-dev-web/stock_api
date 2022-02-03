@@ -33,13 +33,13 @@ api = Api(app)
 
 
 # ROUTES
-@app.route("/")
+@app.route("/health")
 def hello_world():
     return jsonify(hello="server up")
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
-    print("Closing session on request end")
+    print("closing session on request end")
     db.session.remove()
 
 from app.routes import create_routes

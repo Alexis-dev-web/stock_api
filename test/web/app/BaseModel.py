@@ -14,7 +14,7 @@ class Login(db.Model):
   # confirmation_code = db.Column(db.String(255), nullable=True)
   # confirmed = db.Column(db.Boolean(), default=False, nullable=False)
   active = db.Column(db.Boolean(), default=True, nullable=False)
-  user_id = db.Column(db.String(255), db.ForeignKey('Users.id'), unique=True, nullable=False)
+  user_id = db.Column(db.String(255), db.ForeignKey('User.id'), unique=True, nullable=False)
   created_at  = db.Column(db.TIMESTAMP, default=func.current_timestamp())
   updated_at = db.Column(db.TIMESTAMP, default=func.current_timestamp(), onupdate=func.current_timestamp())
 

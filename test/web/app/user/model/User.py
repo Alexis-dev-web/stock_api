@@ -12,13 +12,14 @@ class GenderType(enum.Enum):
 
 class Profile(enum.Enum):
   ADMIN = 'ADMIN'
+  OTHER = 'OTHER'
 
 
 class User(db.Model):
   __tablename__ = "User"
 
   id = db.Column(db.String(255), primary_key=True)
-  name = db.Column(db.String(50), unique=True, nullable=False)
+  name = db.Column(db.String(50), nullable=False)
   last_name = db.Column(db.String(50), unique=True, nullable=False)
   gender = db.Column(db.Enum(GenderType))
   profile = db.Column(db.Enum(Profile), default=Profile.ADMIN)

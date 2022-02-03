@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      context: ./test/web
+      dockerfile: Dockerfile
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./test/web/:/usr/src/app/
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+    networks:
+      - app-tier
+  db:
+    image: postgres:12-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment: 
+      - POSTGRES_USER=stock
+      - POSTGRES_PASSWORD=stock
+      - POSTGRES_DB=stock_server
+    ports:
+      - 5432:5432
+    networks:
+      - app-tier
+  manage-database:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=stock@robert.mx
+      - PGADMIN_DEFAULT_PASSWORD=stock
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
+
+volumes: 
+  postgres_data:
+
+networks:
+  app-tier:
+    driver: bridge

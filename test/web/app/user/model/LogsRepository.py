@@ -1,4 +1,3 @@
-from platformdirs import user_runtime_dir
 from app import db
 from sqlalchemy import func
 
