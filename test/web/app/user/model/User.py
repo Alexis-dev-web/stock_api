@@ -20,7 +20,7 @@ class User(db.Model):
 
   id = db.Column(db.String(255), primary_key=True)
   name = db.Column(db.String(50), nullable=False)
-  last_name = db.Column(db.String(50), unique=True, nullable=False)
+  last_name = db.Column(db.String(50), nullable=False)
   gender = db.Column(db.Enum(GenderType))
   profile = db.Column(db.Enum(Profile), default=Profile.ADMIN)
   created_at  = db.Column(db.TIMESTAMP, default=func.current_timestamp())

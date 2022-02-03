@@ -12,7 +12,7 @@ class Login(db.Model):
   email = db.Column(db.String(128), unique=True, nullable=False)
   password = db.Column(db.String(255), nullable=True)
   # confirmation_code = db.Column(db.String(255), nullable=True)
-  # confirmed = db.Column(db.Boolean(), default=False, nullable=False)
+  confirmed = db.Column(db.Boolean(), default=False, nullable=True)
   active = db.Column(db.Boolean(), default=True, nullable=False)
   user_id = db.Column(db.String(255), db.ForeignKey('User.id'), unique=True, nullable=False)
   created_at  = db.Column(db.TIMESTAMP, default=func.current_timestamp())
@@ -28,7 +28,7 @@ class Login(db.Model):
           'id': self.id, 
           'email': self.email,
           # 'confirmation_code': self.confirmation_code,
-          # 'confirmed': self.confirmed,
+          'confirmed': self.confirmed,
           'user_id': self.user_id,
           'active': self.active,
           'created_at': str(self.created_at),

@@ -5,13 +5,14 @@ from app import app
 from app.util.error_mesages import messages
 from app.user.service.UserService import UserService
 from app.user.service.UserValidator import UserValidator
-
+from app.auth.service.AuthService import AuthService
 
 class AuthController(Resource):
 
     def __init__(self):
       self.userValidator = UserValidator()
       self.userService = UserService()
+      self.authService = AuthService()
 
     def post(self):
       if not request.is_json:

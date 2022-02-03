@@ -4,6 +4,7 @@ from app.user.model.User import GenderType, Profile
 from app.BaseModel import Login
 from app.auth.model.LoginRepository import LoginRepository
 from app.util.utils import generate_random_password
+from werkzeug.security import generate_password_hash
 
 
 class UserService:
@@ -25,13 +26,16 @@ class UserService:
     user.gender = GenderType(gender)
     user.profile = profile if not profile else Profile(profile)
     user = self.userRepository.save(user)
+    password = generate_random_password(8)
 
-    login = Login(email=email, password=generate_random_password(8))
+    login = Login(email=email, password=generate_password_hash(password))
     login.user_id = user.id
+    login.confirmed = True
     login = self.loginRepository.save(login)
 
     user = user.serialize()
     user['email'] = login.email
+    user['password'] = password
 
     return user
 

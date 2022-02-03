@@ -84,7 +84,7 @@ class UserValidator:
     if not check_password_hash(login.password, password):
         raise AssertionError(messages['credentials_not_match'])
     
-    if not login.email_confirmed:
+    if not login.confirmed:
         raise AssertionError(messages['verify_email'])
 
     user = self.userRepository.get_by_id(login.user_id)

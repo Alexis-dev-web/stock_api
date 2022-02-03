@@ -5,6 +5,7 @@ from app.stock.controller.AdminProductsController import AdminProductsController
 from app.stock.controller.ProductController import ProductController
 from app.stock.controller.ProductsControler import ProductsController
 from app.user.controller.AdminUserController import AdminUserController
+from app.auth.controller.AuthController import AuthController
 
 
 def create_routes(api):
@@ -16,6 +17,7 @@ def create_routes(api):
   api.add_resource(AdminCategoriesController, '/admin/categories')
   api.add_resource(AdminCategoryController, '/admin/category')
   api.add_resource(AdminUserController, '/admin/user')
+  api.add_resource(AuthController, '/admin/auth')
 
   """
       Public routes

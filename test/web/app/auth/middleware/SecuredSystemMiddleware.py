@@ -10,30 +10,29 @@ from app.auth.AuthMiddlewareValidator import validate_admin_user_token
 class SecuredSystemMiddleware:
     
   @staticmethod
-  def validate_token_admin(func):
-      @wraps(func)
-      def wrapper(*args, **kwargs):
-          
-          if not request.headers.get("authorization"):
-              return abort(401, message="Authorization header required")
+  def web_user_authentication_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not request.headers.get("authorization"):
+            return abort(401, message="Authorization required")
 
-          if not request.headers["authorization"]:
-              return abort(401, message="Authorization required")
-          
-          admin_token = request.headers.get("authorization")
-          jwt_provider = JWTProvider()
-          user_payload = jwt_provider.parser_user_with_expiration_time(admin_token)
+        if not request.headers["authorization"]:
+            return abort(401, message="Authorization required")
+        
+        user_token = request.headers.get("authorization")
+        jwt_provider = JWTProvider()
+        user_payload = jwt_provider.parser_user_with_expiration_time(user_token)
 
-          if not user_payload or not user_payload["userId"]:
-              return abort(401, message="Token has expired", reason="TOKEN_NOT_VALID")
+        if not user_payload or not user_payload["userId"]:
+            return abort(401, message="Token has expired")
 
-          try:
-              validate_admin_user_token(user_payload)
-          except AssertionError as assertionError:
-              error_message = str(assertionError)
-              app.logger.error(f"SecuredSystemMiddleware#validate_token_admin FAILURE - Validation error - exception={error_message}")
-              return abort(400, message=error_message)
+        try:
+            validate_admin_user_token(user_token, user_payload)
+        except Exception as e:
+            error_message = str(e)
+            app.logger.error(f"UserAuthMiddleware#web_user_authentication_required FAILURE - Validation error - reason={error_message}")
+            return abort(401, message=error_message)
 
-          return func(*args, **kwargs)
+        return func(*args, **kwargs)
 
-      return wrapper
+    return wrapper

@@ -52,8 +52,8 @@ class JWTProvider:
             utf-8 string token decoded
 
         """
-
-        return jwt.encode(claim_data, self.JWT_SECRET, algorithm=self.ALGORITHM).decode('utf-8')
+        print(jwt.encode(claim_data, self.JWT_SECRET, algorithm=self.ALGORITHM))
+        return jwt.encode(claim_data, self.JWT_SECRET, algorithm=self.ALGORITHM)
 
     def generate_user_with_expiration_hours(self, user_id, expiration_hours):
         expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=expiration_hours)

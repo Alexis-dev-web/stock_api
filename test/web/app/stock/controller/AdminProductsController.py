@@ -4,6 +4,7 @@ from flask.json import jsonify
 from flask_restful import Resource, abort
 from app import app
 
+from app.auth.middleware.SecuredSystemMiddleware import SecuredSystemMiddleware
 from app.util.RequestExceptions import ValueRequiredException
 from app.stock.service.ProductService import ProductService
 from app.stock.service.ProductValidator import ProductValidator
@@ -12,7 +13,7 @@ from app.stock.service.ProductValidator import ProductValidator
 class AdminProductsController(Resource):
 
     method_decorators = {
-        # 'get': [SecuredSystemMiddleware.validate_token_admin]
+        'get': [SecuredSystemMiddleware.web_user_authentication_required]
     }
 
     def __init__(self):

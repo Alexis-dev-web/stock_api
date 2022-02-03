@@ -14,7 +14,9 @@ from app.user.service.UserValidator import UserValidator
 class AdminUserController(Resource):
 
     method_decorators = {
-        # 'get': [SecuredSystemMiddleware.validate_token_admin]
+        'get': [SecuredSystemMiddleware.web_user_authentication_required],
+        'post': [SecuredSystemMiddleware.web_user_authentication_required], 
+        'delete': [SecuredSystemMiddleware.web_user_authentication_required]
     }
 
     def __init__(self):

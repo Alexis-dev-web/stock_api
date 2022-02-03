@@ -14,7 +14,10 @@ from app.stock.service.ProductValidator import ProductValidator
 class AdminProductController(Resource):
 
     method_decorators = {
-        'get': [SecuredSystemMiddleware.validate_token_admin]
+        'get': [SecuredSystemMiddleware.web_user_authentication_required],
+        'post': [SecuredSystemMiddleware.web_user_authentication_required],
+        'patch': [SecuredSystemMiddleware.web_user_authentication_required], 
+        'delete': [SecuredSystemMiddleware.web_user_authentication_required]
     }
 
     def __init__(self):

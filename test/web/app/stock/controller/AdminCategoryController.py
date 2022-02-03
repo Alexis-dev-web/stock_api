@@ -5,6 +5,7 @@ from flask_restful import Resource, abort
 from app import app
 
 from app.util.error_mesages import messages
+from app.auth.middleware.SecuredSystemMiddleware import SecuredSystemMiddleware
 from app.util.RequestExceptions import ValueRequiredException
 from app.stock.service.CategoryService import CategoryService
 from app.stock.service.CategoryValidator import CategoryValidator
@@ -12,11 +13,11 @@ from app.stock.service.CategoryValidator import CategoryValidator
 
 class AdminCategoryController(Resource):
 
-    # method_decorators = {
-    #     'post': [SecuredSystemMiddleware.validate_token_admin],
-    #     'patch': [SecuredSystemMiddleware.validate_token_admin],
-    #     'get': [SecuredSystemMiddleware.validate_token_admin]
-    # }
+    method_decorators = {
+        'post': [SecuredSystemMiddleware.web_user_authentication_required],
+        'patch': [SecuredSystemMiddleware.web_user_authentication_required], 
+        'delete': [SecuredSystemMiddleware.web_user_authentication_required]
+    }
 
     def __init__(self):
       self.categoryValidator = CategoryValidator()
