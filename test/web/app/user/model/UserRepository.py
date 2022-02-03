@@ -1,7 +1,7 @@
 from app import db
-from sqlalchemy import func
 
 from app.user.model.User import User
+from app.BaseModel import Login
 
 
 class UserRepository:
@@ -20,3 +20,8 @@ class UserRepository:
   def update(self, user) -> User:
     db.session.commit()
     return user
+
+  def get_by_id_with_email(self, user_id):
+    return User.query.join(Login, User.id == Login.user_id)\
+      .add_columns(Login.email)\
+      .filter(User.id==user_id).first()

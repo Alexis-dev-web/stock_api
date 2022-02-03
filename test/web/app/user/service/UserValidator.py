@@ -32,7 +32,7 @@ class UserValidator:
     if not user_id:
       raise ValueRequiredException(messages['user_id_required'])
 
-    user = self.userRepository.get_by_id(user_id)
+    user = self.userRepository.get_by_id_with_email(user_id)
     if not user:
       raise AssertionError(messages['user_not_exist'])
 

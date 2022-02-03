@@ -28,11 +28,13 @@ class AdminUserController(Resource):
       app.logger.info(f"AdminUserController#get START - Request received - userAgent={request.user_agent.string}")
 
       try: 
-          product = self.productValidator.validate_product_exist(product_id)
+          user = self.userValidator.validate_user_exist(request.args)
 
-          app.logger.info(f"AdminUserController#get SUCCESS - Product retrieved - productId={product.id} adminUserId={admin_user_id}")
+          user = self.userService.response_user_with_email(user)
 
-          return jsonify(data=product.serialize())
+          app.logger.info(f"AdminUserController#get SUCCESS - Product retrieved - userId={user['id']} adminUserId={admin_user_id}")
+
+          return jsonify(data=user)
       except ValueRequiredException as vex:
           return abort(400, message=str(vex))
       except AssertionError as assertionError:
@@ -50,7 +52,7 @@ class AdminUserController(Resource):
           self.userValidator.validate_create_new_user(request.json)
 
           user = self.userService.create_user(request.json)
-          print(user)
+
           app.logger.info(f"AdminUserController#post SUCCESS - User retrieved - userId={user['id']}")
 
           return jsonify(data=user)
@@ -61,45 +63,24 @@ class AdminUserController(Resource):
           app.logger.error(f'AdminUserController#post FAILURE - Can not create product - reason={error_message}')
           return abort(400, message=error_message)
 
-    # def patch(self):
-    #   if not request.is_json:
-    #     return abort(400, message=messages['missing_json'])
+    def delete(self):
+      if not request.is_json:
+        return abort(400, message=messages['missing_json'])
 
-    #   app.logger.info(f"AdminUserController#patch START - Request received - userAgent={request.user_agent.string}")
+      app.logger.info(f"AdminUserController#delete START - Request received - userAgent={request.user_agent.string}")
 
-    #   try: 
-    #       product = self.productValidator.validate_update_product(request.json)
+      try: 
+          user = self.userValidator.validate_user_exist(request.json)
 
-    #       product = self.productService.update(request.json, product)
+          self.userService.delete_user(user)
 
-    #       app.logger.info(f"AdminUserController#patch SUCCESS - Product retrieved - productId={product.id}")
+          app.logger.info(f"AdminUserController#delete SUCCESS - User deleted")
 
-    #       return jsonify(data=product.serialize())
-    #   except ValueRequiredException as vex:
-    #       return abort(400, message=str(vex))
-    #   except AssertionError as assertionError:
-    #       error_message = str(assertionError)
-    #       app.logger.error(f'AdminUserController#patch FAILURE - Can not create product - reason={error_message}')
-    #       return abort(400, message=error_message)
-
-    # def delete(self):
-    #   if not request.is_json:
-    #     return abort(400, message=messages['missing_json'])
-
-    #   app.logger.info(f"AdminUserController#delete START - Request received - userAgent={request.user_agent.string}")
-
-    #   try: 
-    #       product = self.productValidator.validate_product_exist(request.json.get('product_id', None))
-
-    #       product = self.productService.delete_product(product)
-
-    #       app.logger.info(f"AdminUserController#delete SUCCESS - Product retrieved - productId={product.id}")
-
-    #       return '', 204
-    #   except ValueRequiredException as vex:
-    #       return abort(400, message=str(vex))
-    #   except AssertionError as assertionError:
-    #       error_message = str(assertionError)
-    #       app.logger.error(f'AdminUserController#delete FAILURE - Can not create product - reason={error_message}')
-    #       return abort(400, message=error_message)
+          return '', 204
+      except ValueRequiredException as vex:
+          return abort(400, message=str(vex))
+      except AssertionError as assertionError:
+          error_message = str(assertionError)
+          app.logger.error(f'AdminUserController#delete FAILURE - Can not create product - reason={error_message}')
+          return abort(400, message=error_message)
 

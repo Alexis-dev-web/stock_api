@@ -1,3 +1,4 @@
+from urllib import response
 from app.user.model.UserRepository import User, UserRepository
 from app.user.model.User import GenderType, Profile
 from app.BaseModel import Login
@@ -55,4 +56,11 @@ class UserService:
     login.password = json_body.get('password')
     return self.loginRepository.update(login)
 
-  
+  def response_user_with_email(self, user):
+    response = user.User.serialize()
+    response['email'] = user.email
+    return response
+
+  def delete_user(self, user):
+    login = self.loginRepository.get_by_user_id(user.User.id)
+    return self.loginRepository.delete(login)
